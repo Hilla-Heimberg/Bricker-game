@@ -1,0 +1,147 @@
+hilla_heimberg
+208916221
+
+=============================
+=      File description     =
+=============================
+BrickerGameManager.java- This is the main class in the "Bricker" game. Responsible for the whole game logic
+and add game objects to the collection. Inherits from GameManager.
+
+1. Package - gameobjects - package contains game objects for the "Brick" game.
+Classes-
+# Ball.java- This is the ball object in the "Bricker" game. Inherits from GameObject.
+
+# BallCollisionCountdownAgent.java- This is the agent object in the "Bricker" game. Represents a counter
+needed for the camera change strategy. Inherits from GameObject.
+
+# Puck.java- This is the puck ball object in the "Bricker" game. Represents another gray ball that is being
+released upon breaking a brick with PuckStrategy. Inherits from Ball.
+
+# Brick.java-This is the brick object in the "Bricker" game. Inherits from GameObject.
+
+# Paddle.java- This is the paddle object in the "Bricker" game. Inherits from GameObject.
+
+# MockPaddle.java- This is the mock paddle object in the "Bricker" game. Represents another paddle in the
+game, related to the add paddle strategy. Inherits from Paddle.
+
+# NumericLifeCounter.java- This is the numeric life counter object in the "Bricker" game. Represents the
+numeric counter presented on the screen. Inherits from GameObject.
+
+# GraphicLifeCounter.java- This is the graphic life counter object in the "Bricker" game. Represents the
+hearts that are presented on the screen. Inherits from GameObject.
+
+# StatusChanger.java- This is the status changer object in the "Bricker" game. Inherits from GameObject.
+
+2. Package - brick_strategies - package contains strategies for the "Bricker" game.
+Classes-
+# AddPaddleStrategy.java- This is the "add paddle strategy" in the "Bricker" game. In case of collision
+between ball and brick - this strategy add another paddle to the game in the middle of the screen.
+Inherits from RemoveBrickStrategyDecorator which implements the "CollisionStrategy" interface.
+
+# ChangeCameraStrategy.java- This is the "change camera strategy" in the "Bricker" game. In case of collision
+between ball and brick - this strategy focus on the main ball and zoom in on him.
+Inherits from RemoveBrickStrategyDecorator which implements the "CollisionStrategy" interface.
+
+# ExtendOrNarrowStrategy.java- This is the "extend or narrow strategy" in the "Bricker" game. In case of
+collision between ball and brick - this strategy drops a buffer and if it hits a paddle it changes its size.
+Namely,extend or narrow a paddle in the game.
+Inherits from RemoveBrickStrategyDecorator which implements the "CollisionStrategy" interface.
+
+# PuckStrategy.java- This is the "puck strategy" in the "Bricker" game. In case of
+collision between ball and brick - this strategy add another 3 gray balls to the game.
+Inherits from RemoveBrickStrategyDecorator which implements the "CollisionStrategy" interface.
+
+# RemoveBrickStrategy.java- This is the "remove brick strategy" in the "Bricker" game. In case of
+collision between ball and brick - this strategy delete the brick from the game.
+Implements the "CollisionStrategy" interface.
+
+# RemoveBrickStrategyDecorator.java- This is the decorator of the "Bricker" game. The decorator combines the
+basic remove strategy with another strategy who implements CollisionStrategy interface.
+Implements the "CollisionStrategy" interface.
+
+# CollisionStrategy.java- This is the interface of of the "Bricker" game. All the strategies in the game must
+implement it.
+
+# BrickStrategyFactory.java- This is the strategy factory of the "Bricker" game. It choose strategy in
+randomly way and preserve the desire probabilities.
+
+3. Package - algo_questions - package contains solutions for the algorithms questions.
+Classes-
+# Solutions.java - contains solutions for the algorithms questions.
+
+4. README
+
+=========================================================
+=          Design and Implementation details            =
+=========================================================
+# Implementing "CollisionStrategy" interface-
+All the strategies in the brick_strategies package must implement "CollisionStrategy" interface. In this
+way we maintain uniformity in all the different strategies and to avoid duplicate code.
+
+# Inheriting from "GameObject"-
+All the game objects inherit from "GameObject" in indirectly or directly way. I chose this design
+pattern because that is what you demanded in the API, but I agree with this way because its allow us to share
+mutual code (functions and attributes) in order to make sure that all the game objects based on the same basic
+functionality that works with the "danogl" package. In this way we can add specific functions or attributes
+for each of the game object, independently.
+
+# Strategy Factory-
+The factory strategy is demanded in the API also but I agree with this design pattern because it's allow us
+to add more new strategies to the game easily and with minimum of modifications.
+In addition, I used the factory for preserve the required probability.
+In the first collision - we randomize strategy in probability of 1/6.
+If the chosen strategy is the "complex strategy" - it splits to two cases -
+1. probability of 4/5 for double strategy.
+2. probability of 1/5 for trio strategy.
+In this way I kept the probability for choosing trio strategy to be 1/30 as required.
+
+# RemoveBrickStrategy Decorator-
+I used the decorator because it allows to wrap a basic strategy with another one, and even
+with several.
+
+=============================
+=    Answers to questions   =
+=============================
+Explanation about the algorithms:
+
+"alotStudyTime" -
+1. Correctness - in each iteration, we try to insert the first and smallest task to the smallest slot. We act
+in a greedy way and we sorted the array in order to get the best solution in the best run time.
+2. Run Time analysis -MAX(O(nlog(n), O(mlog(m))). explanation-
+- sort the arrays - O(nlogn) for the array of tasks,  O(mlogm) for the array of the timeSlots.
+- in the worst case - we will move over all the tasks and all the slots. therefore, in the worst case we will
+do O(n) for the tasks array and O(m) for the timeSlots array.
+Sum total - O(nlogn) + O(mlogm) + O(n) + O(m) = MAX(O(nlog(n), O(mlog(m)))
+
+"minLeap" -
+1. Correctness- in each iteration we look for the optimal leaf to jump on. We act in a greedy way (and
+partial dynamic) by searching the maximum jumps that will pay off for us in the future acts in order to get to
+the final leaf in minimum jumps.
+2. Run Time analysis - O(n). explanation-
+- going over all the leaves array - O(n).
+- in the for loop (inside the while) - we update the i step to be the "curFarthestLeaf" in order to keep
+the run time on O(n). We won't go again over all the array thanks to the updating of i step to the farthest
+leaf in our last checking -takes O(1)*basic operations (= updating indexes). (we assume that we don't need to
+check the former leaves, because if so - we would have chosen them first to be the maximum). So we can skip
+them. Namely, by this skipping we avoiding from double moving on the array - we go over it just once.
+Sum total - O(n) + O(1)*basic operations = O(n).
+
+"bucketWalk" -
+1. Correctness - we have one way to fill 0 or 1 liter in the trough. We have two ways to fill 2 liter in the
+trough. We have (one way + two ways) to fill 3 liter in the trough. Notice that we have formula for computing
+the numbers of way to fill liters in the trough. The formula is "Fibonacci" formula. This formula based on the
+two previous calculations.
+2. Run Time analysis - O(n). explanation-
+- Running over the array of size n - O(n).
+- Updating three variables who saves the previous calculations. O(1) for update one variable.
+Sum total - O(n) + O(1)*basic operations = O(n).
+
+"numTrees" -
+1. Correctness - this is a known solution based on Catalan numbers.
+2. Run Time analysis - the calculations based on the Catalan numbers - O(n^2).
+
+=============================
+=    Remark   =
+=============================
+Sorry about my README in part 1 of this project. I submitted my README of exercise 2 accidentally :(
+HAVE A GOOD DAY :D
